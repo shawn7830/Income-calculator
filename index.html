@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>朝の秒給</title>
+<title>給料カウンター</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap">
 <style>
 :root{--bg:#eef3f1;--fg:#12302b;--mut:#5b716c;--acc:#e0a100;--card:#fff;--line:#cfdcd8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
@@ -13,7 +13,7 @@
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 "Zen Kaku Gothic New",sans-serif;font-variant-numeric:tabular-nums}
 main{max-width:560px;margin:0 auto;padding:24px 20px 56px}
 .date{margin:0;color:var(--mut);font-size:.9rem}
-.lead{margin:4px 0 20px;font-size:1.15rem}.lead b{font-size:1.5rem;font-weight:900}
+.lead{margin:8px 0 4px;font-size:1.15rem}.lead b{font-size:1.5rem;font-weight:900}
 .hero{border-top:4px solid var(--acc);padding-top:12px}
 .lab{margin:0;color:var(--mut);font-size:.9rem}
 #month{font-size:clamp(2.3rem,12vw,4rem);font-weight:900;line-height:1.15;letter-spacing:-.01em;overflow-wrap:anywhere}
@@ -35,32 +35,91 @@ label span{display:flex;align-items:center;gap:4px}
 input{font:inherit;width:8.5em;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);text-align:right}
 label i{font-style:normal;color:var(--mut);font-size:.8rem;min-width:2em}
 .bh{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:.9rem;font-weight:700}
+.gl{display:flex;justify-content:space-between;font-size:.9rem}
+.bar{height:10px;border-radius:5px;background:var(--line);overflow:hidden;margin:4px 0 14px}.bar i{display:block;height:100%;background:var(--acc)}
+.sp{display:flex;height:14px;border-radius:7px;overflow:hidden;margin:6px 0}.sp i{display:block;height:100%}
+.k{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+details+details{margin-top:12px}
+.ib{display:block;width:100%;margin:14px 0 8px;padding:10px 14px;border:2px solid var(--acc);border-radius:999px;background:transparent;color:var(--fg);font:inherit;font-weight:700;cursor:pointer}
+.bd{border-top:0;padding-top:0;margin:10px 0}
+.bd div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+#eq{margin-top:2px}
+.stb{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));right:12px;font:inherit;font-size:.72rem;padding:2px 10px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--mut);cursor:pointer;z-index:5}
+body.sm .ib,body.sm #info,body.sm .lead,body.sm .stats,body.sm .seg,body.sm .bd,body.sm #split,body.sm #goalbox,body.sm #rateinfo,body.sm #tag,body.sm #pay,body.sm details,body.sm .note,body.sm .date{display:none!important}
+body.sm main{min-height:70vh;display:flex;flex-direction:column;justify-content:center}
+body.sm #month{display:inline-block;white-space:nowrap;overflow-wrap:normal;line-height:1.1;font-size:15vw}
+body.sm main{max-width:none}
+body.sm .hero{text-align:center}
+body.sm .lab{font-size:1.05rem}
+#intro{display:none;max-width:560px;margin:0 auto;padding:32px 20px 56px}
+body.ob #intro{display:block}body.ob main{display:none}
+#intro h2{font-size:1.6rem;line-height:1.35;margin:0 0 10px;font-weight:900}
+#intro p{margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:.95rem}
+.card b{display:block;font-size:1.02rem}
+.go{font:inherit;font-weight:700;width:100%;padding:12px;border:0;border-radius:10px;background:var(--fg);color:var(--bg);cursor:pointer;margin-top:16px}
+.dots{color:var(--mut);font-size:.8rem}
+#obe{font-size:.9rem;font-weight:700;min-height:1.3em;margin:8px 0 0}
+#obe:not(:empty){background:var(--card);border:2px solid var(--acc);border-radius:8px;padding:8px 12px}
+.lk{font:inherit;font-size:.78rem;background:none;border:0;color:var(--mut);text-decoration:underline;cursor:pointer;padding:0}
 .note{color:var(--mut);font-size:.78rem;margin-top:20px}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
+<section id="intro">
+<div class="stp" data-s="0"><p class="dots">1 / 3</p>
+<h2>仕事中の「つらい」を、増えていくお金に変えよう</h2>
+<p>働いた時間が、秒ごとにお金になっていくカウンターです。仕事中に横に置いて、見ながらがんばれます。</p>
+<div class="card"><b>横に置いて見るだけ</b>「帰りたいな」と思ったら、増えていく金額をちらっと見る。</div>
+<div class="card"><b>秒ごとに増えるのが見える</b>1秒、1分、1日で、いくら稼いでいるかが分かる。</div>
+<div class="card"><b>残業や年収の目安も分かる</b>割増やボーナスを入れた、今月の見込みと年収の目安が出る。</div>
+<p class="note">入力した内容は、この端末の中にだけ保存されます。外には送られません。</p>
+<button class="go" data-n="1">はじめる</button></div>
+<div class="stp" data-s="1" hidden><p class="dots">2 / 3</p>
+<h2>使い方は3つだけ</h2>
+<div class="card"><b>1. 給料の情報を入れる</b>基本給(または時給)と、勤務時間を入れます。1分で終わります。</div>
+<div class="card"><b>2. カウンターを横に置く</b>仕事中に開いたままにします。「シンプル表示」なら、金額だけが大きく出ます。</div>
+<div class="card"><b>3. 詳しくはあとから</b>残業やボーナス、手取り率は予想でOK。「給与の設定」でいつでも変えられます。</div>
+<button class="go" id="g1" data-n="2">設定に進む</button></div>
+<div class="stp" data-s="2" hidden><p class="dots">3 / 3</p>
+<h2>まず、これだけ教えてください</h2>
+<span class="seg" data-k="type"><button data-v="monthly">月給制</button><button data-v="hourly">時給制</button></span>
+<div id="obform"></div>
+<p class="note">残業・ボーナス・手取り率などは、あとからメイン画面の「給与の設定」で入れられます。</p>
+<p id="obe"></p>
+<button class="go" id="fin">完了して、カウンターを見る</button></div>
+</section>
 <main>
+<button id="stbtn" class="stb"></button>
 <p class="date" id="date"></p>
-<p class="lead">今日の予定金額 <b id="plan"></b></p>
 <section class="hero">
 <p class="lab" id="lab"></p>
 <div id="month" aria-live="off"></div>
 </section>
+<p class="lead">今日の予定金額 <b id="plan"></b></p>
+<p class="note" id="pay" hidden style="margin:0 0 12px;font-size:.9rem"></p>
 <div class="stats">
-<div><small>今日ここまで</small><strong id="today"></strong></div>
+<div><small>今日ここまで</small><strong id="today"></strong><small id="eq"></small></div>
 <div><small>1秒あたり</small><strong id="sec"></strong></div>
 </div>
+<p class="note" id="tag" hidden></p>
+<div id="goalbox" hidden><div class="gl"><span id="goalt"></span><span id="goalp"></span></div><div class="bar"><i id="goalbar"></i></div></div>
+<p class="note" id="rateinfo" hidden></p>
 <div>
-<span class="seg" data-k="mode"><button data-v="work">勤務時間のみ</button><button data-v="all">24時間</button></span>
+<span class="seg" data-k="mode"><button data-v="auto">自動</button><button data-v="work">勤務時間のみ</button><button data-v="all">24時間</button></span>
 <span class="seg" data-k="disp"><button data-v="gross">額面</button><button data-v="net">手取り概算</button></span>
 </div>
+<button id="ib" class="ib" aria-expanded="false">基礎情報を見る</button>
+<div id="info" hidden>
 <div class="bd">
 <div><small>基礎時給</small><strong id="h"></strong></div>
 <div><small>今月の見込み(残業は予想)</small><strong id="M"></strong></div>
 <div><small id="Yl">年収の目安(今月×12、ボーナス別)</small><strong id="Y"></strong></div>
 <div><small>残業代(予想・額面。うち割増分)</small><strong id="ot"></strong></div>
 </div>
+</div>
+<div id="split" hidden><p class="note">今月の見込みの内訳(額面)</p><div class="sp"><i id="s1" style="background:var(--mut);opacity:.4"></i><i id="s2" style="background:var(--fg)"></i><i id="s3" style="background:var(--acc)"></i></div><div id="sleg" class="note" style="margin-top:4px"></div></div>
 <details>
 <summary>給与の設定</summary>
 <div class="pre">
@@ -68,28 +127,47 @@ label i{font-style:normal;color:var(--mut);font-size:.8rem;min-width:2em}
 <button data-p="A">A 月給・残業20h</button><button data-p="B">B 時給制</button><button data-p="C">C 残業70h</button><button data-p="D1">D-1 手当を除外</button><button data-p="D2">D-2 手当を含める</button>
 </div>
 <span class="seg" data-k="type"><button data-v="monthly">月給制</button><button data-v="hourly">時給制</button></span>
+<p class="note">手当はどちらに入れても、毎月の給料には全額足されます。違うのは残業代のときだけで、「含める」に入れた手当は残業代の時給の計算に入り、「含めない」は入りません。</p>
 <p class="note">残業・深夜(22時〜5時)・休日の時間と手取り率は予想です。先月の実績などを目安に入れると、今月の見込みはその予想で計算されます。</p>
 <div id="form"></div>
 </details>
+<details>
+<summary>詳細設定(入れると表示が増えます)</summary>
+<p class="note">目標金額・休憩時間・給与明細の控除額を入れると、対応する表示が出ます。空のままなら出ません。</p>
+<div id="form2"></div>
+</details>
+<p class="note"><button id="help" class="lk">使い方を見る</button>・<button id="rst" class="lk">最初からやり直す</button></p>
 <p class="note">金額は目安で、実際の支給額とは異なります。割増率は法定の最低ライン(残業25%、月60時間超50%、深夜25%、休日35%)で計算し、祝日は平日として数えます。入力した内容はこの端末の中にだけ保存され、外には送られません。</p>
 </main>
 <script>
 const $=id=>document.getElementById(id);
-const D={type:'monthly',base:327500,allowIn:0,allowOut:45000,wage:1200,days:15,holidays:127,daily:8,start:'09:00',end:'18:00',ot:22,night:0,hol:0,mode:'work',disp:'gross',net:80,bmode:'months',bmonths:10,bAllow:0,bamount:0};
+const D={type:'monthly',base:327500,allowIn:0,allowOut:45000,wage:1200,days:15,holidays:127,daily:8,start:'09:00',end:'18:00',ot:22,night:0,hol:0,mode:'auto',disp:'gross',net:80,bmode:'months',bmonths:10,bAllow:0,bamount:0,goal:0,b0:'',b1:'',pgross:0,pHealth:0,pPension:0,pEmp:0,pIncome:0,pRes:0,pOther:0,payDay:0,goalName:'',rw1v:500,rw1t:'コーヒー1杯分',rw2v:1000,rw2t:'ランチ1回分',rw3v:3000,rw3t:'映画1本分',rw4v:5000,rw4t:'ちょっといい夕食1回分',rw5v:10000,rw5t:'高級ディナー1回分'};
 const P={
 A:{type:'monthly',base:220000,allowIn:0,allowOut:0,holidays:120,daily:8,ot:20,night:0,hol:0,bmode:'months',bmonths:4,bamount:0},
 B:{type:'hourly',wage:1200,days:15,daily:6,ot:0,night:0,hol:0,bmode:'amount',bmonths:0,bamount:0},
 C:{type:'monthly',base:300000,allowIn:0,allowOut:0,holidays:125,daily:8,ot:70,night:0,hol:0,bmode:'months',bmonths:5,bamount:0},
 D1:{type:'monthly',base:327500,allowIn:0,allowOut:45000,holidays:127,daily:8,ot:22,night:0,hol:0,bmode:'months',bmonths:10,bamount:0},
 D2:{type:'monthly',base:327500,allowIn:45000,allowOut:0,holidays:127,daily:8,ot:22,night:0,hol:0,bmode:'months',bmonths:10,bamount:0}};
-const F=[['base','基本給(月額)','円','m'],['allowIn','割増の対象になる手当','円','m'],['allowOut','割増の対象外の手当(家賃補助など)','円','m'],['holidays','年間休日','日','m'],['wage','時給','円','h'],['days','月の勤務予定日数','日','h'],['daily','1日の所定労働時間','時間',''],['start','始業','','t'],['end','終業','','t'],['ot','今月の残業時間(予想)','時間',''],['night','うち深夜(予想)','時間',''],['hol','休日労働(予想)','時間',''],['bmonths','ボーナス年間合計(基本給の何か月分・予想)','か月','bm'],['bAllow','ボーナスの基準に含める手当(月額。家賃補助などは入れない)','円','bm'],['bamount','ボーナス年額(予想)','円','ba'],['net','手取り率(目安)','%','']];
+const F=[['base','基本給(月額)','円','m'],['allowIn','残業代の計算に含める手当(役職・資格手当など)','円','m'],['allowOut','残業代の計算に含めない手当(通勤・住宅・家族手当など)','円','m'],['holidays','年間休日','日','m'],['wage','時給','円','h'],['days','月の勤務予定日数','日','h'],['daily','1日の所定労働時間','時間',''],['start','始業','','t'],['end','終業','','t'],['ot','今月の残業時間(予想)','時間',''],['night','うち深夜(予想)','時間',''],['hol','休日労働(予想)','時間',''],['bmonths','ボーナス年間合計(基本給の何か月分・予想)','か月','bm'],['bAllow','ボーナスの基準に含める手当(月額。家賃補助などは入れない)','円','bm'],['bamount','ボーナス年額(予想)','円','ba'],['net','手取り率(目安)','%','']];
+const F2=[['payDay','給料日(毎月)','日',''],['goal','今月の目標金額','円',''],['goalName','ごほうびの名前(任意。例: 新しいイヤホン)','','x'],['b0','休憩の開始','','t'],['b1','休憩の終了','','t'],['pgross','支給合計額(明細の額面)','円',''],['pHealth','健康保険料','円',''],['pPension','厚生年金保険料','円',''],['pEmp','雇用保険料','円',''],['pIncome','所得税','円',''],['pRes','住民税','円',''],['pOther','その他の控除','円',''],['rw1v','1段目の金額','円',''],['rw1t','1段目の名前','','x'],['rw2v','2段目の金額','円',''],['rw2t','2段目の名前','','x'],['rw3v','3段目の金額','円',''],['rw3t','3段目の名前','','x'],['rw4v','4段目の金額','円',''],['rw4t','4段目の名前','','x'],['rw5v','5段目の金額','円',''],['rw5t','5段目の名前','','x']];
+const ALL=F.concat(F2);
+const H={rw1v:'ごほうびの段階(5段階。「今日ここまで」の一言の金額と名前を変えられます)',payDay:'給料日(入れると、給料日までの日数が出ます)',goal:'目標金額(表示中の額面/手取りに合わせて比べます)',b0:'休憩時間(勤務時間のみモードで、休憩中の加算が止まります。始業〜終業の間で入力)',pgross:'手取り率を給与明細から計算(入れると手取り率が自動で決まります)'};
+$('form2').innerHTML=F2.map(([k,l,u,g])=>(H[k]?`<div class="bh">${H[k]}</div>`:'')+`<label data-g="${g}">${l}<span><input id="f_${k}" type="${g==='t'?'time':'number'}" step="any" inputmode="decimal"><i>${u}</i></span></label>`).join('');
+$('f_goalName').type='text';$('f_goalName').style.textAlign='left';
+[1,2,3,4,5].forEach(i=>{const e=$('f_rw'+i+'t');e.type='text';e.style.textAlign='left';e.style.width='11em'});
 let S={...D};
-try{Object.assign(S,JSON.parse(localStorage.getItem('asa')||'{}'))}catch(e){}
+let had=null;try{had=localStorage.getItem('asa')}catch(e){}
+try{Object.assign(S,JSON.parse(had||'{}'))}catch(e){}
+if(S.setup===undefined)S.setup=!!had;
+if(!S.mv){if(S.mode==='work')S.mode='auto';S.mv=1}
+if(S.mode==='manual')S.mode='work';
 const save=()=>{try{localStorage.setItem('asa',JSON.stringify(S))}catch(e){}};
 const BH='<div class="bh">ボーナス(予想)<span class="seg" data-k="bmode"><button data-v="months">○か月分</button><button data-v="amount">年額</button></span></div>';
 $('form').innerHTML=F.map(([k,l,u,g])=>(k==='bmonths'?BH:'')+`<label data-g="${g}">${l}<span><input id="f_${k}" type="${g==='t'?'time':'number'}" step="any" inputmode="decimal"><i>${u}</i></span></label>`).join('');
-F.forEach(([k,,,g])=>$('f_'+k).addEventListener('input',e=>{S[k]=g==='t'?e.target.value:e.target.value;save();model()}));
+ALL.forEach(([k,,,g])=>$('f_'+k).addEventListener('input',e=>{S[k]=g==='t'?e.target.value:e.target.value;save();model()}));
 const yen=(v,d)=>'¥'+v.toLocaleString('ja-JP',{minimumFractionDigits:d,maximumFractionDigits:d});
+function rate(){const g=+S.pgross||0;if(g>0){const d=['pHealth','pPension','pEmp','pIncome','pRes','pOther'].reduce((a,k)=>a+(+S[k]||0),0);return{r:Math.min(1,Math.max(0,(g-d)/g)),auto:true}}return{r:(+S.net||0)/100,auto:false}}
+const tk=()=>{const t=new Date();return t.getFullYear()+'-'+t.getMonth()+'-'+t.getDate()};
 const C={};
 const bv=(v,u)=>{const g=yen(v,0)+u,n=yen(v*C.nr,0)+u;return '額面 '+g+'<br>手取り '+n};
 function model(){
@@ -102,8 +180,12 @@ const otP=h*o+h*k,pr=h*k;
 C.h=h;C.otP=otP;C.pr=pr;
 C.M=fixed+otP+h*.25*n('night')+h*1.35*n('hol');
 C.pr+=h*.25*n('night')+h*.35*n('hol');
-C.net=S.disp==='net'?n('net')/100:1;
-C.nr=(+S.net||0)/100;
+const R=rate();C.net=S.disp==='net'?R.r:1;C.nr=R.r;document.body.classList.toggle('sm',!!S.simple);$('stbtn').textContent=S.simple?'戻る':'シンプル表示';
+const sp=[fixed,h*o+h*n('hol'),C.pr],st=(sp[0]+sp[1]+sp[2])||1;
+$('split').hidden=!(o>0||n('hol')>0||n('night')>0);
+['s1','s2','s3'].forEach((id,i)=>$(id).style.width=(sp[i]/st*100)+'%');
+$('sleg').innerHTML=['固定給・手当','残業・休日の通常分','割増分'].map((t,i)=>`<span class="k" style="background:${['var(--mut)','var(--fg)','var(--acc)'][i]};opacity:${i?1:.4}"></span>${t} ${yen(sp[i],0)}`).join('<br>');
+$('rateinfo').hidden=!R.auto;$('rateinfo').textContent='手取り率 '+(R.r*100).toFixed(1)+'%(給与明細の控除額から計算)';
 $('h').innerHTML=bv(h,'/時');
 $('M').innerHTML=bv(C.M,'');
 C.B=S.bmode==='months'?(+S.bmonths||0)*(S.type==='monthly'?(+S.base||0)+(+S.bAllow||0):fixed):(+S.bamount||0);
@@ -117,9 +199,12 @@ document.querySelectorAll('[data-g="bm"]').forEach(e=>e.hidden=S.bmode!=='months
 document.querySelectorAll('[data-g="ba"]').forEach(e=>e.hidden=S.bmode!=='amount');
 document.querySelectorAll('.seg').forEach(s=>s.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',S[s.dataset.k]===b.dataset.v)));
 }
-function sync(){F.forEach(([k])=>$('f_'+k).value=S[k]);model()}
+function sync(){ALL.forEach(([k])=>$('f_'+k).value=S[k]);model()}
 document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{S[b.parentNode.dataset.k]=b.dataset.v;save();model()}));
 document.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>{Object.assign(S,P[b.dataset.p]);save();sync()}));
+let fk='',am=null,lm='';
+function fit(){const m=$('month');if(!document.body.classList.contains('sm')){m.style.fontSize='';return}m.style.fontSize='100px';const w=m.parentNode.clientWidth,s=m.offsetWidth||1;m.style.fontSize=Math.max(12,Math.min(Math.floor(97*w/s),innerHeight*.5))+'px'}
+if(document.fonts)document.fonts.ready.then(()=>{fk=''});
 function tick(){
 const t=new Date(),Y=t.getFullYear(),M=t.getMonth(),dd=t.getDate(),dim=new Date(Y,M+1,0).getDate();
 let W=0,done=0;
@@ -127,17 +212,45 @@ for(let d=1;d<=dim;d++){const w=new Date(Y,M,d).getDay();if(w>0&&w<6){W++;if(d<d
 const sn=t.getHours()*3600+t.getMinutes()*60+t.getSeconds()+t.getMilliseconds()/1000;
 const tm=v=>{const[a,b]=(v||'0:0').split(':');return a*3600+b*60};
 const s0=tm(S.start),s1=tm(S.end),span=s1-s0,wd=t.getDay(),wk=wd>0&&wd<6;
-let day,f,mf,sec,plan;
-if(S.mode==='work'){day=W?C.M/W:0;f=wk&&span>0?Math.min(Math.max((sn-s0)/span,0),1):0;mf=W?(done+f)/W:0;sec=span>0?day/span:0;plan=wk?day:0}
+const key=tk(),b0=tm(S.b0),b1=tm(S.b1),hb=S.b0&&S.b1&&b1>b0&&b0>=s0&&b1<=s1;
+const eff=hb?span-(b1-b0):span,wkd=x=>Math.min(Math.max(x-s0,0),span)-(hb?Math.max(0,Math.min(Math.min(Math.max(x,s0),s1),b1)-b0):0);
+let md=S.mode;if(md==='auto'){if(lm!=='auto'||!am)am=wk&&span>0&&sn>=s0&&sn<s1?'work':'all';md=am}lm=S.mode;
+let day,f,mf,sec,plan,tag='';
+if(md==='work'){day=W?C.M/W:0;f=wk&&eff>0?Math.min(Math.max(wkd(sn)/eff,0),1):0;mf=W?(done+f)/W:0;sec=eff>0?day/eff:0;plan=wk?day:0;if(hb&&wk&&sn>=b0&&sn<b1){sec=0;tag='休憩中(加算を止めています)'}}
 else{day=C.M/dim;f=sn/86400;mf=(dd-1+f)/dim;sec=day/86400;plan=day}
-$('month').textContent=yen(C.M*mf*C.net,2);
+if(S.mode==='auto'&&!tag)tag=md==='work'?'自動: 勤務時間のみで表示中':'自動: 24時間で表示中(勤務時間外)';
+const mt=yen(C.M*mf*C.net,2);$('month').textContent=mt;const fkk=!!S.simple+'|'+mt.length+'|'+innerWidth+'|'+innerHeight;if(fkk!==fk){fk=fkk;fit()}
 $('today').textContent=yen(day*f*C.net,2);
+const cu=day*f*C.net,L=[1,2,3,4,5].map(i=>[+S['rw'+i+'v']||0,S['rw'+i+'t']||'']).filter(x=>x[0]>0&&x[1]).sort((a,b)=>a[0]-b[0]);let li=-1;L.forEach((x,i)=>{if(cu>=x[0])li=i});
+const es=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+$('eq').innerHTML=(li>=0?es(L[li][1])+'を稼いだ':'')+(li>=0&&li<L.length-1?'<br>':'')+(li<L.length-1?'次は'+es(L[li+1][1])+'まで、あと'+yen(L[li+1][0]-cu,0):'');
 $('sec').textContent=yen(sec*C.net,3);
 $('plan').textContent=yen(plan*C.net,0);
+const pdv=+S.payDay||0;$('pay').hidden=!(pdv>0);
+if(pdv>0){const pd=(y,m)=>new Date(y,m,Math.min(pdv,new Date(y,m+1,0).getDate()));let nx=pd(Y,M);const t0=new Date(Y,M,dd);if(nx<t0)nx=pd(Y,M+1);const nd=Math.round((nx-t0)/864e5);$('pay').textContent=nd?'給料日まであと '+nd+'日('+(nx.getMonth()+1)+'月'+nx.getDate()+'日)':'今日は給料日です!'}
+$('tag').hidden=!tag;$('tag').textContent=tag;
+const gl=+S.goal||0;$('goalbox').hidden=!(gl>0);
+if(gl>0){const cur=C.M*mf*C.net,p=Math.min(cur/gl*100,100);$('goalt').textContent=cur>=gl?(S.goalName?'「'+S.goalName+'」に届きました!':'目標を達成しました!'):(S.goalName?'「'+S.goalName+'」':'目標')+'('+yen(gl,0)+')まであと '+yen(gl-cur,0);$('goalp').textContent=p.toFixed(1)+'%';$('goalbar').style.width=p+'%'}
 requestAnimationFrame(tick);
 }
 $('date').textContent=new Date().toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
-sync();tick();
+$('ib').onclick=()=>{const o=$('info').hidden;$('info').hidden=!o;$('ib').setAttribute('aria-expanded',o);$('ib').textContent=o?'基礎情報を閉じる':'基礎情報を見る'};
+$('stbtn').onclick=()=>{S.simple=!S.simple;save();model()};
+const BLANK={allowIn:0,allowOut:0,ot:0,night:0,hol:0,bmode:'months',bmonths:0,bAllow:0,bamount:0,goal:0,goalName:'',payDay:0,b0:'',b1:'',pgross:0,pHealth:0,pPension:0,pEmp:0,pIncome:0,pRes:0,pOther:0,net:80,mode:'auto',disp:'gross',simple:false};
+const OF=[['base','基本給(月額)','円','m','','例 250000'],['wage','時給','円','h','','例 1200'],['days','月の勤務予定日数','日','h','20',''],['holidays','年間休日','日','m','120',''],['daily','1日の所定労働時間','時間','','8',''],['start','始業','','t','09:00',''],['end','終業','','t','18:00','']];
+$('obform').innerHTML=OF.map(([k,l,u,g,v,p])=>`<label data-g="${g}">${l}<span><input id="o_${k}" type="${g==='t'?'time':'text'}" step="any" inputmode="decimal" value="${v}" placeholder="${p}"><i>${u}</i></span></label>`).join('');
+let obs=0,obHelp=false,arm=false;
+function ob(){const on=!S.setup||obHelp;document.body.classList.toggle('ob',on);document.querySelectorAll('.stp').forEach(e=>e.hidden=+e.dataset.s!==obs);$('g1').textContent=obHelp?'メイン画面に戻る':'設定に進む'}
+document.querySelectorAll('.go[data-n]').forEach(b=>b.onclick=()=>{const n=+b.dataset.n;if(n===2&&obHelp)obHelp=false;else obs=n;ob();scrollTo(0,0)});
+const er=t=>{$('obe').textContent=t;$('obe').scrollIntoView({block:'center'})};
+$('fin').onclick=()=>{const v=k=>$('o_'+k).value,n=k=>+String(v(k)).replace(/[,，\s円]/g,'').replace(/[０-９]/g,c=>String.fromCharCode(c.charCodeAt(0)-65248))||0,m=S.type==='monthly';
+if(m?n('base')<=0:n('wage')<=0){er(m?'基本給(数字)を入れてください':'時給(数字)を入れてください');return}
+if(n('daily')<=0||!v('start')||!v('end')){er('勤務時間を入れてください');return}
+S=Object.assign({},D,BLANK,{type:S.type,base:n('base'),wage:n('wage'),days:n('days'),holidays:n('holidays'),daily:n('daily'),start:v('start'),end:v('end'),setup:true});
+save();sync();$('obe').textContent='';ob();scrollTo(0,0)};
+$('help').onclick=()=>{obHelp=true;obs=0;ob();scrollTo(0,0)};
+$('rst').onclick=()=>{if(!arm){arm=true;$('rst').textContent='もう一度押すと、設定を消して最初に戻ります';return}arm=false;$('rst').textContent='最初からやり直す';S=Object.assign({},D,{setup:false});save();obs=0;obHelp=false;sync();ob();scrollTo(0,0)};
+sync();ob();tick();
 </script>
 </body>
 </html>
