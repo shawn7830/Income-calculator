@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>朝の秒給</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap">
+<style>
+:root{--bg:#eef3f1;--fg:#12302b;--mut:#5b716c;--acc:#e0a100;--card:#fff;--line:#cfdcd8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1b1a;--fg:#e7f0ec;--mut:#93aaa4;--acc:#f2c14e;--card:#152827;--line:#274240;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1b1a;--fg:#e7f0ec;--mut:#93aaa4;--acc:#f2c14e;--card:#152827;--line:#274240;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.7 "Zen Kaku Gothic New",sans-serif;font-variant-numeric:tabular-nums}
+main{max-width:560px;margin:0 auto;padding:24px 20px 56px}
+.date{margin:0;color:var(--mut);font-size:.9rem}
+.lead{margin:4px 0 20px;font-size:1.15rem}.lead b{font-size:1.5rem;font-weight:900}
+.hero{border-top:4px solid var(--acc);padding-top:12px}
+.lab{margin:0;color:var(--mut);font-size:.9rem}
+#month{font-size:clamp(2.3rem,12vw,4rem);font-weight:900;line-height:1.15;letter-spacing:-.01em;overflow-wrap:anywhere}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.stats div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.stats small,.bd small{display:block;color:var(--mut);font-size:.8rem}
+.stats strong{font-size:1.15rem}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;margin:4px 8px 4px 0}
+.seg button{font:inherit;font-size:.85rem;padding:6px 14px;border:0;background:transparent;color:var(--fg);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.bd{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:20px 0;border-top:1px solid var(--line);padding-top:14px}
+.bd strong{font-size:.95rem;line-height:1.5}
+details{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:10px 14px}
+summary{cursor:pointer;font-weight:700}
+.pre{margin:10px 0}.pre button{font:inherit;font-size:.8rem;margin:0 6px 6px 0;padding:4px 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--fg);cursor:pointer}
+label{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 0;font-size:.9rem}
+label span{display:flex;align-items:center;gap:4px}
+input{font:inherit;width:8.5em;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--fg);text-align:right}
+label i{font-style:normal;color:var(--mut);font-size:.8rem;min-width:2em}
+.bh{display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:.9rem;font-weight:700}
+.note{color:var(--mut);font-size:.78rem;margin-top:20px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+<p class="date" id="date"></p>
+<p class="lead">今日の予定金額 <b id="plan"></b></p>
+<section class="hero">
+<p class="lab" id="lab"></p>
+<div id="month" aria-live="off"></div>
+</section>
+<div class="stats">
+<div><small>今日ここまで</small><strong id="today"></strong></div>
+<div><small>1秒あたり</small><strong id="sec"></strong></div>
+</div>
+<div>
+<span class="seg" data-k="mode"><button data-v="work">勤務時間のみ</button><button data-v="all">24時間</button></span>
+<span class="seg" data-k="disp"><button data-v="gross">額面</button><button data-v="net">手取り概算</button></span>
+</div>
+<div class="bd">
+<div><small>基礎時給</small><strong id="h"></strong></div>
+<div><small>今月の見込み(残業は予想)</small><strong id="M"></strong></div>
+<div><small id="Yl">年収の目安(今月×12、ボーナス別)</small><strong id="Y"></strong></div>
+<div><small>残業代(予想・額面。うち割増分)</small><strong id="ot"></strong></div>
+</div>
+<details>
+<summary>給与の設定</summary>
+<div class="pre">
+<small>テストデータ: </small>
+<button data-p="A">A 月給・残業20h</button><button data-p="B">B 時給制</button><button data-p="C">C 残業70h</button><button data-p="D1">D-1 手当を除外</button><button data-p="D2">D-2 手当を含める</button>
+</div>
+<span class="seg" data-k="type"><button data-v="monthly">月給制</button><button data-v="hourly">時給制</button></span>
+<p class="note">残業・深夜(22時〜5時)・休日の時間と手取り率は予想です。先月の実績などを目安に入れると、今月の見込みはその予想で計算されます。</p>
+<div id="form"></div>
+</details>
+<p class="note">金額は目安で、実際の支給額とは異なります。割増率は法定の最低ライン(残業25%、月60時間超50%、深夜25%、休日35%)で計算し、祝日は平日として数えます。入力した内容はこの端末の中にだけ保存され、外には送られません。</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const D={type:'monthly',base:327500,allowIn:0,allowOut:45000,wage:1200,days:15,holidays:127,daily:8,start:'09:00',end:'18:00',ot:22,night:0,hol:0,mode:'work',disp:'gross',net:80,bmode:'months',bmonths:10,bAllow:0,bamount:0};
+const P={
+A:{type:'monthly',base:220000,allowIn:0,allowOut:0,holidays:120,daily:8,ot:20,night:0,hol:0,bmode:'months',bmonths:4,bamount:0},
+B:{type:'hourly',wage:1200,days:15,daily:6,ot:0,night:0,hol:0,bmode:'amount',bmonths:0,bamount:0},
+C:{type:'monthly',base:300000,allowIn:0,allowOut:0,holidays:125,daily:8,ot:70,night:0,hol:0,bmode:'months',bmonths:5,bamount:0},
+D1:{type:'monthly',base:327500,allowIn:0,allowOut:45000,holidays:127,daily:8,ot:22,night:0,hol:0,bmode:'months',bmonths:10,bamount:0},
+D2:{type:'monthly',base:327500,allowIn:45000,allowOut:0,holidays:127,daily:8,ot:22,night:0,hol:0,bmode:'months',bmonths:10,bamount:0}};
+const F=[['base','基本給(月額)','円','m'],['allowIn','割増の対象になる手当','円','m'],['allowOut','割増の対象外の手当(家賃補助など)','円','m'],['holidays','年間休日','日','m'],['wage','時給','円','h'],['days','月の勤務予定日数','日','h'],['daily','1日の所定労働時間','時間',''],['start','始業','','t'],['end','終業','','t'],['ot','今月の残業時間(予想)','時間',''],['night','うち深夜(予想)','時間',''],['hol','休日労働(予想)','時間',''],['bmonths','ボーナス年間合計(基本給の何か月分・予想)','か月','bm'],['bAllow','ボーナスの基準に含める手当(月額。家賃補助などは入れない)','円','bm'],['bamount','ボーナス年額(予想)','円','ba'],['net','手取り率(目安)','%','']];
+let S={...D};
+try{Object.assign(S,JSON.parse(localStorage.getItem('asa')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('asa',JSON.stringify(S))}catch(e){}};
+const BH='<div class="bh">ボーナス(予想)<span class="seg" data-k="bmode"><button data-v="months">○か月分</button><button data-v="amount">年額</button></span></div>';
+$('form').innerHTML=F.map(([k,l,u,g])=>(k==='bmonths'?BH:'')+`<label data-g="${g}">${l}<span><input id="f_${k}" type="${g==='t'?'time':'number'}" step="any" inputmode="decimal"><i>${u}</i></span></label>`).join('');
+F.forEach(([k,,,g])=>$('f_'+k).addEventListener('input',e=>{S[k]=g==='t'?e.target.value:e.target.value;save();model()}));
+const yen=(v,d)=>'¥'+v.toLocaleString('ja-JP',{minimumFractionDigits:d,maximumFractionDigits:d});
+const C={};
+const bv=(v,u)=>{const g=yen(v,0)+u,n=yen(v*C.nr,0)+u;return '額面 '+g+'<br>手取り '+n};
+function model(){
+const n=k=>+S[k]||0;
+const mh=(365-n('holidays'))*n('daily')/12;
+const h=S.type==='monthly'?(mh>0?(n('base')+n('allowIn'))/mh:0):n('wage');
+const fixed=S.type==='monthly'?n('base')+n('allowIn')+n('allowOut'):n('wage')*n('daily')*n('days');
+const o=n('ot'),k=.25*Math.min(o,60)+.5*Math.max(o-60,0);
+const otP=h*o+h*k,pr=h*k;
+C.h=h;C.otP=otP;C.pr=pr;
+C.M=fixed+otP+h*.25*n('night')+h*1.35*n('hol');
+C.pr+=h*.25*n('night')+h*.35*n('hol');
+C.net=S.disp==='net'?n('net')/100:1;
+C.nr=(+S.net||0)/100;
+$('h').innerHTML=bv(h,'/時');
+$('M').innerHTML=bv(C.M,'');
+C.B=S.bmode==='months'?(+S.bmonths||0)*(S.type==='monthly'?(+S.base||0)+(+S.bAllow||0):fixed):(+S.bamount||0);
+$('Y').innerHTML=bv(C.M*12+C.B,'');
+$('Yl').textContent=C.B>0?'年収の目安(今月×12+ボーナス'+yen(C.B,0)+')':'年収の目安(今月×12、ボーナス別)';
+$('ot').textContent=yen(otP,0)+'(割増 '+yen(C.pr,0)+')';
+$('lab').textContent='今月ここまでの稼ぎ('+(S.disp==='net'?'手取り概算':'額面')+')';
+document.querySelectorAll('[data-g="m"]').forEach(e=>e.hidden=S.type!=='monthly');
+document.querySelectorAll('[data-g="h"]').forEach(e=>e.hidden=S.type!=='hourly');
+document.querySelectorAll('[data-g="bm"]').forEach(e=>e.hidden=S.bmode!=='months');
+document.querySelectorAll('[data-g="ba"]').forEach(e=>e.hidden=S.bmode!=='amount');
+document.querySelectorAll('.seg').forEach(s=>s.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',S[s.dataset.k]===b.dataset.v)));
+}
+function sync(){F.forEach(([k])=>$('f_'+k).value=S[k]);model()}
+document.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{S[b.parentNode.dataset.k]=b.dataset.v;save();model()}));
+document.querySelectorAll('[data-p]').forEach(b=>b.addEventListener('click',()=>{Object.assign(S,P[b.dataset.p]);save();sync()}));
+function tick(){
+const t=new Date(),Y=t.getFullYear(),M=t.getMonth(),dd=t.getDate(),dim=new Date(Y,M+1,0).getDate();
+let W=0,done=0;
+for(let d=1;d<=dim;d++){const w=new Date(Y,M,d).getDay();if(w>0&&w<6){W++;if(d<dd)done++}}
+const sn=t.getHours()*3600+t.getMinutes()*60+t.getSeconds()+t.getMilliseconds()/1000;
+const tm=v=>{const[a,b]=(v||'0:0').split(':');return a*3600+b*60};
+const s0=tm(S.start),s1=tm(S.end),span=s1-s0,wd=t.getDay(),wk=wd>0&&wd<6;
+let day,f,mf,sec,plan;
+if(S.mode==='work'){day=W?C.M/W:0;f=wk&&span>0?Math.min(Math.max((sn-s0)/span,0),1):0;mf=W?(done+f)/W:0;sec=span>0?day/span:0;plan=wk?day:0}
+else{day=C.M/dim;f=sn/86400;mf=(dd-1+f)/dim;sec=day/86400;plan=day}
+$('month').textContent=yen(C.M*mf*C.net,2);
+$('today').textContent=yen(day*f*C.net,2);
+$('sec').textContent=yen(sec*C.net,3);
+$('plan').textContent=yen(plan*C.net,0);
+requestAnimationFrame(tick);
+}
+$('date').textContent=new Date().toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'});
+sync();tick();
+</script>
+</body>
+</html>
